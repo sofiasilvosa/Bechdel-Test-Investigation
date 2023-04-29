@@ -1,0 +1,15 @@
+--- 
+title: "Stat 210 Project" 
+author: "Sophia" 
+format: pdf 
+---
+
+# Heading 
+
+```{r}
+
+
+
+
+
+```
