@@ -167,7 +167,7 @@ dubious = unclear
 
 
   
-  ggplot(data= movies_decades, mapping= aes(x= binary, y= dom_gross_mil)) +
+  ggplot(data= movies_decades, mapping= aes(x= binary, y= dom_Gross2013)) +
   geom_boxplot()
 
 
@@ -187,7 +187,7 @@ dubious = unclear
 
 
 
-ggplot(data = movies_decades, mapping = aes(x = year, y = dom_gross_mil )) +
+ggplot(data = movies_decades, mapping = aes(x = year, y = dom_Gross2013 )) +
   geom_point() +
   facet_grid(. ~ binary)
 
@@ -198,14 +198,12 @@ ggplot(data = movies_decades, mapping = aes(x = year, y = dom_gross_mil )) +
 
 
 
+```{r make-variable-binary, message = F, warning = F}
 
-```{r log, message = F, warning = F}
+movies1_0 <- movies_decades %>% 
+ mutate(passfail= ifelse(binary =='PASS', 1, 0))
 
 
-m1 <- glm(Legendary ~ HP + Attack + Defense + Sp..Atk + Sp..Def + Speed, 
-          data = pokemon,
-          family = "binomial")
-summary(m1)
 
 
 ```
@@ -215,7 +213,105 @@ summary(m1)
 
 
 
+```{r log, message = F, warning = F}
 
+ 
+  
+
+
+
+
+m2 <- glm(passfail ~ decade,
+          data = movies1_0,
+          family = "binomial")
+summary(m2)
+
+
+```
+
+
+```{r log, message = F, warning = F}
+
+ 
+  
+
+m2 <- glm(passfail ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
+          data = movies1_0,
+          family = "binomial")
+summary(m2)
+
+
+```
+
+# lets run this model but multinomially
+
+
+```{r multinomial, message = F, warning = F}
+
+ 
+library(nnet)
+
+
+movie_dummy <- movies1_0 %>% 
+group_by(clean_test) %>% 
+mutate( ok_clean = case_when(clean_test=='ok' ~'Aok',
+                         clean_test=='men' ~'men',
+                         clean_test=='dubious'~'dubious',
+                     clean_test== 'notalk' ~ 'notalk',
+                     clean_test== 'nowomen' ~ 'nowomen'))
+
+
+  
+
+m2 <- multinom(ok_clean ~ year + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
+          data = movie_dummy)
+summary(m2)
+
+
+```
+
+
+```{r LASSO, message = F, warning = F}
+
+ 
+  y <- movies1_0$passfail
+x <- model.matrix(passfail ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013 ,
+                  data = movies1_0)
+library(glmnet) # (has LASSO-related functions here)
+m_lasso_cv <- cv.glmnet(x, y, alpha = 1)
+
+best_lambda <- m_lasso_cv$lambda.min
+best_lambda
+
+m_best <- glmnet(x, y, alpha = 1, lambda = best_lambda)
+m_best$beta
+
+plot(m_lasso_cv)
+
+```
+
+
+```{r LASSO, message = F, warning = F}
+
+###subset 
+ 
+library(leaps)
+m_all <- regsubsets(passfail ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013 ,
+                  data = movies1_0, 
+                  nbest = 1, nvmax =9)
+
+
+
+
+summary(m_all)
+
+summary(m_all)$cp
+#summary(m_all)$rsq
+summary(m_all)$bic
+
+```
+
+Through this method we are able to see that our test is pretty good since the more variables we put in the better our mode is as shown by bic and cp.
 
 
 
@@ -253,7 +349,7 @@ terms of generated domestic gross across the 1970-2013 period.
 
 
 
-m1 <- lm(dom_gross_mil ~ binary + budget_mil + year  , data = movies_decades)
+m1 <- lm(dom_Gross2013 ~ binary + budget_Gross2013 + year  , data = movies_decades)
 summary(m1) 
 
 
