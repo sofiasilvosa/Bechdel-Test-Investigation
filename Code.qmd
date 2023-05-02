@@ -9,7 +9,7 @@ format: pdf
 
 
 
-```{r read-data, message = F, warning = F}
+```{r read-data, message = F, warning = F, echo=FALSE}
 library(tidyverse)
 library(ggfortify)
 library(viridis)
@@ -29,29 +29,37 @@ movies <- read_csv("movies.csv")
 
 ```
 
-# Background and Significance:
+*Background and Significance:*
 
 
-
-There has been recent discussion on adequation representation in film.
-The movie industry has changed a lot in the past couple of decades due to
-increased advocady for diversity and inclusion. Over th years, we have
-seen more BIPOC representation in entertainement as well as gender identity
-and LGBTQ+ representation. Many in the film industry have also championed the
-increased representaion of women in film. For a while Hollywood procudced 
-very little movies with female protagonists; let alone movies with apprpropirayte 
+There has been recent discussion on adequate female representation in film.
+Many in the film industry have recently praised the
+increased representation of women in film. For a while Hollywood produced
+very little movies with female protagonists; let alone movies with appropriate 
 representation of women
 (Goodman, 2017). But there has been recent progress in the recent years with 
 an impressive increase in female lead movies in the 2010s; not only that but
-these films have achived monetary sucesss. In 2016 with, 29 percent of 
+these films have achieved monetary success. In 2016 with, 29 percent of 
 protagonists in the top 100 box-office hits were women (Goodman, 2017)
 
-However, merely having female prtagaonsits does not paint the full picture if
+However, merely having female protagonists does not paint the full picture if
 whether a movie actually does a good job in female representation. 
-Many have used the so-called Bechdel test to make this judgement.
-The Bechdel test is
+Many have used the so-called Bechdel test to make this judgement. This test
+was developed by Allison Bechdel in 1985 and has recently become a digital
+sensation (O'Meara).
 
-# Data:
+The Bechdel test is a simple test which deems that a movie has adequate 
+female character in their film if it passes the following three criteria:
+(1) it has to have at least two women in it, who (2) who talk to each other, 
+about (3) something besides a man (https://bechdeltest.com/) .
+
+
+Many have argued that there has been significant increase of female 
+representation throughout the decades thanks to increased diversity 
+initiatives and more women at the helm of the film industry 
+(UCLA-Hollywood-Diversity-Report-2022-Film). If this the case, then
+we would expect more recent films, specially those of the 2000s and 2010s, to
+have a greater amount of films that pass the Bechdel test. 
 
 
 
@@ -63,15 +71,37 @@ Does the decade a movie was released predict whether it passes
 the bechdel test (logistic regression)
 will this change if we look at the variable in a multinomial fashion?
 
-Does passing the bechdel test predict how much a movie is going to
+Does passing the Bechdel test predict how much a movie is going to
 make while controllung for other important variables?
+
+
+*Data*
+
+To explore our reserch quetsion, we will be using a dataset used in the
+FiveThirtyEight story titled “The Dollar-And-Cents Case Against Hollywood’s
+Exclusion of Women”. The dataset includes observations from 1794 films 
+that were released between 1970-2013. The data set includes huge box office
+hit films including "Die Hard: With a Vengeance" and  David Fincher's "Se7en."
+The data set includes information detailing the title of the film, the year it
+was released, its domestic gross, budget and international gross (both 
+accounting for inflation and without). Furthermore, for our urposes, 
+the data set also includes two important columns regarding whether the
+movie passed or failed the Bechdel test. The column "binary" 
+specifically states whether teh movie passed or failed the bechdel test in a 
+binary fashion. The column "clean_test" goes a bit more in detail, regarding
+how the film failed the bechdel test or if it was unclear whether teh movie 
+passed or not. The clean test variable has five levels: ok (Passed), no women
+(No women in the film), dubious (unclear result), no talk(women did not
+talk to each other), and men (women only talked about men.)
+
+
 
 
 
 #Exploratory Data Analysis
 
 
-```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades-1, message = F, warning = F}
 
 
 
@@ -141,7 +171,7 @@ only 25% passing.
 
 
 
-```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades2, message = F, warning = F}
 
 
   
@@ -163,7 +193,7 @@ no women= no women in the film
 dubious = unclear
 
 
-```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades22, message = F, warning = F}
 
 
   
@@ -181,7 +211,7 @@ dubious = unclear
  
  
 
-```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades222, message = F, warning = F}
 
 
 
@@ -210,13 +240,11 @@ movies1_0 <- movies_decades %>%
 
 
 
+First, we ran a logistic regression model to see if decade alone can
+predict whether a movie passes or fails the bechdel test.
 
 
-
-```{r log, message = F, warning = F}
-
- 
-  
+```{r log-one-predictor, message = F, warning = F}
 
 
 
@@ -224,24 +252,33 @@ movies1_0 <- movies_decades %>%
 m2 <- glm(passfail ~ decade,
           data = movies1_0,
           family = "binomial")
-summary(m2)
+summary(m2) 
 
-
+exp( 0.7679 )
+exp(  0.9690 )
+exp(0.8117  )
 ```
 
 
-```{r log, message = F, warning = F}
-
+According to our model, the odds of a movie from the 1990s to pass the Bechdel
+is estimated to be 2.155236
+times the odds of a movie from the 1970's to pass the test.
  
-  
+Furthermore, according to our model, the odds of a movie from the 2000s to
+pass the Bechdel is estimated to be  2.635308 times the odds of a movie from 
+the 1970's to pass the test.
 
-m2 <- glm(passfail ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
-          data = movies1_0,
-          family = "binomial")
-summary(m2)
+Lastly,according to our model, the odds of a movie from the 2000s to pass 
+the Bechdel is estimated to be  2.251733 times the odds of a movie from 
+the 1970's to pass the test.
+ 
+ 
+However, 
 
 
-```
+
+
+
 
 # lets run this model but multinomially
 
@@ -263,7 +300,8 @@ mutate(ok_clean = case_when(clean_test=='ok' ~'Aok',
 
   
 
-m2 <- multinom(ok_clean ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
+m2 <- multinom(ok_clean ~ decade + budget_Gross2013 +dom_Gross2013 
+               + int_Gross2013,
           data = movie_dummy)
 summary(m2) 
 
@@ -275,7 +313,9 @@ summary(m2)
 
 While holding all the over variables in our model constant, for every one year increase in the year a given was released, the odds of whether the given film is 
 
-That is, in comparing two individuals with the same sex, where one is one year older than the other, we predict that that individual has approximately 0.998 times the odds of survival compared to the younger individual
+
+However, we also wanted to see if we would see a similar result if we add
+additional variables to the mix. We thus decideid to engage in varable selection methods to evaluate what would be the most model to predict whether a movie passes or fails the bechdel test.
 
 
 
@@ -299,7 +339,7 @@ plot(m_lasso_cv)
 ```
 
 
-```{r LASSO, message = F, warning = F}
+```{r LASSO2, message = F, warning = F}
 
 ###subset 
  
@@ -320,6 +360,94 @@ summary(m_all)$bic
 ```
 
 Through this method we are able to see that our test is pretty good since the more variables we put in the better our mode is as shown by bic and cp.
+
+
+
+
+
+```{r log-predict-passfail, message = F, warning = F}
+
+ 
+  
+
+m2 <- glm(passfail ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
+          data = movies1_0,
+          family = "binomial")
+summary(m2)
+
+
+exp(8.648e-01)
+
+
+```
+
+While holding all other variables in our model constant, according to our
+model, the odds of a movie from the 2000s to pass the Bechdel is estimated
+to be  2.374531 times the odds of a movie from the 1970's to pass the test.
+
+Furthermore, 
+
+
+```{r how-many-movies2-passed-test-across-decades, message = F, warning = F}
+
+
+m2_aug <- augment(m2)
+m2_aug <- m2_aug %>%
+mutate(prob = exp(.fitted)/(1 + exp(.fitted)), pred_leg = ifelse(prob >
+0.5,
+'Pass',
+'Fail')) 
+  
+table(m2_aug$pred_leg, m2_aug$passfail)
+
+m2_aug %>% 
+  roc_auc(
+    truth = as.factor(passfail),
+    prob, 
+    event_level = "second"
+  )
+
+
+m2_aug %>% 
+  roc_curve(
+    truth = as.factor(passfail),
+    prob, 
+    event_level = "second"
+  ) %>% 
+  autoplot()
+
+
+
+```
+The AUC (area under the curve) can be used to assess how well we are predicting, and summarizes the entire ROC curve. An AUC of 0.5 implies that the model is no better than a coin flip - an AUC of 1 implies a perfect fit.
+
+
+
+```{r log-predict-passfail, message = F, warning = F}
+
+ 
+  library(Stat2Data)
+emplogitplot1(passfail ~ dom_Gross2013,
+              data = movies1_0,
+              ngroups = 10)
+
+
+# nice
+```
+
+
+```{r log-predict-passfail, message = F, warning = F}
+
+ 
+  library(Stat2Data)
+emplogitplot1(passfail ~ budget_Gross2013,
+              data = movies1_0,
+              ngroups = 10)
+
+
+# nice
+```
+
 
 
 
@@ -353,7 +481,7 @@ those who fail it in
 terms of generated domestic gross across the 1970-2013 period.
 
 
-```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+```{r how-many-movies2-passed-test-across-decades, message = F, warning = F}
 
 
 
@@ -380,8 +508,12 @@ terms of domestic gross.
 
 ##Sources
 
+https://socialsciences.ucla.edu/wp-content/uploads/2022/03/UCLA-Hollywood-Diversity-Report-2022-Film-3-24-2022.pdf
+
 https://www.nytimes.com/2017/02/21/movies/women-protagonists-movies-2016.html
 https://www.tandfonline.com/doi/pdf/10.1080/14680777.2016.1234239?needAccess=true
+
+https://bechdeltest.com/
 
 https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-hollywoods-exclusion-of-women/
 
