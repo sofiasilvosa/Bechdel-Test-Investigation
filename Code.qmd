@@ -254,7 +254,7 @@ library(nnet)
 
 movie_dummy <- movies1_0 %>% 
 group_by(clean_test) %>% 
-mutate( ok_clean = case_when(clean_test=='ok' ~'Aok',
+mutate(ok_clean = case_when(clean_test=='ok' ~'Aok',
                          clean_test=='men' ~'men',
                          clean_test=='dubious'~'dubious',
                      clean_test== 'notalk' ~ 'notalk',
@@ -263,12 +263,20 @@ mutate( ok_clean = case_when(clean_test=='ok' ~'Aok',
 
   
 
-m2 <- multinom(ok_clean ~ year + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
+m2 <- multinom(ok_clean ~ decade + budget_Gross2013 +dom_Gross2013 + int_Gross2013,
           data = movie_dummy)
-summary(m2)
+summary(m2) 
+
 
 
 ```
+
+
+
+While holding all the over variables in our model constant, for every one year increase in the year a given was released, the odds of whether the given film is 
+
+That is, in comparing two individuals with the same sex, where one is one year older than the other, we predict that that individual has approximately 0.998 times the odds of survival compared to the younger individual
+
 
 
 ```{r LASSO, message = F, warning = F}
