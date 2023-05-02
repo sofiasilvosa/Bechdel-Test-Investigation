@@ -63,16 +63,27 @@ have a greater amount of films that pass the Bechdel test.
 
 
 
-
-
 # Research Question & Hypothesis
 
-Does the decade a movie was released predict whether it passes 
-the bechdel test (logistic regression)
-will this change if we look at the variable in a multinomial fashion?
+We are interested in evaluating what variables are important in
+predicting whether a movie form this specific data set passes or fails
+the Bechdel test. We are more so interested in how time period plays 
+a role in predictihng whether a movie passes or fails the Bechdel test.
 
-Does passing the Bechdel test predict how much a movie is going to
-make while controllung for other important variables?
+In other words, Does the decade a movie was released predict whether it passes 
+the Bechdel test while controlling for other pivotal variables in our model?
+
+As shiwn by recent news and media, more modern movies seem to have more
+increased rprpensstaion of women in their films. Thus, we predict that 
+the time period in whcih a movie was released will play a significnat role
+in whether the movie fails or passes the Bechdel test. More specicially,
+we predict that movies released in the 200's and 2010's have a greater
+percentage of movies that pass the Bechdel rather than those that came 
+out in the 20th century represented in our data set.
+
+
+
+
 
 
 *Data*
@@ -89,19 +100,33 @@ the data set also includes two important columns regarding whether the
 movie passed or failed the Bechdel test. The column "binary" 
 specifically states whether teh movie passed or failed the bechdel test in a 
 binary fashion. The column "clean_test" goes a bit more in detail, regarding
-how the film failed the bechdel test or if it was unclear whether teh movie 
+how the film failed the bechdel test or if it was unclear whether the movie 
 passed or not. The clean test variable has five levels: ok (Passed), no women
 (No women in the film), dubious (unclear result), no talk(women did not
 talk to each other), and men (women only talked about men.)
 
+We created new variables for the purposes of our analysis. For starters,
+we created a decades variable that detailed which decade the given film
+was released in. The variable ended up having 5 different levels: 1970s,
+1980s, 1990s, 2000s and 2010s. We also created a new variable titled passfail
+which is essentially the same as our binary variable but instead uses dummy
+values to illustrated whether the movies passed (passfail=1) pr failed 
+(passdfail=0) the Bechdel test.
 
+We excluded 18 observations from our final analysis. These observations had 
+no values for their total domestic gross and total budget. These 
+are variables of interest that important variables that we want to control for
+thus the movies that did not have the values for these variables were removed.
+Since we still had 1776 left in our data set, our statustical analyses will
+not be greatly affected since we are still working with a large data set.
 
 
 
 #Exploratory Data Analysis
 
 
-```{r how-many-movies-passed-test-across-decades-1, message = F, warning = F}
+
+```{r how-many-movies-passed-test-across-decades-1, message = F, warning = F, echo= FALSE}
 
 
 
@@ -137,7 +162,12 @@ movies_decades <- movies2 %>%
                        2010 <= year ~ '2010s ' ))  
   
   ggplot(data= movies_decades, mapping= aes(x=decade, fill=binary)) +
-  geom_bar(position = "fill")
+  geom_bar(position = "fill") +
+labs(title="The % of films that pass the Bechdel Test has increased through time", 
+       subtitle = "The 2010s had the largest percentage of movies that passed
+     the Bechdel Test",
+     y= 'Propportion of Bechdel Test Results', fill= 'Bechdel Test Results',
+     x= 'Decade')
 
 
 movies_decades %>% 
@@ -171,7 +201,7 @@ only 25% passing.
 
 
 
-```{r how-many-movies-passed-test-across-decades2, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades2, message = F, warning = F, echo= FALSE}
 
 
   
@@ -184,16 +214,9 @@ only 25% passing.
 
 ```
 
-clean_ test: categories
-
-men= women only about men
-not talk= women do not talk to each other
-ok= passed
-no women= no women in the film
-dubious = unclear
 
 
-```{r how-many-movies-passed-test-across-decades22, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades22, message = F, warning = F, echo= FALSE}
 
 
   
@@ -206,29 +229,45 @@ dubious = unclear
 ```
 
 
- ^^^ this looks bad but I do not think this difference is significant (lots of factors we are not controlling for)
- 
- 
- 
-
-```{r how-many-movies-passed-test-across-decades222, message = F, warning = F}
+#Methodolody
 
 
 
 
+First, we ran a logistic regression model to see if decade alone can
+predict whether a movie passes or fails the Bechdel test. We chose to run
+a logistic regression model and use the binary variable detailing whether 
+the movie passed or did not pass teh Bechdel tets. We chose to use the binary 
+version detailing whether given dilm's performance on the Bechdel test rather
+than our clean_test variable. If we ran a logistic model with the clean_test
+as our outcome variable, we would have to use a multinomial regression model
+to test out our research question. A multinomial regression model would not
+made sense in this context the  independence of irrelevant alternatives
+assumption would have been violated. This assumption assumes that, in a
+multinomial logistic
+regression model, the relative odds of choosing one option over another
+should not be influenced
+by the inclusion or exclusion of an additional option.
+This assumption does not 
+apply in this case. This does not make sense since the inclusion or exclusion 
+of a Bechdel test failing category could have an effect on our final analysis. 
+For example, if a given film with plentiful female representation that was 
+released in 2013 (which according to our hypothesis means it has a greater
+chance of passing the Bechdel test) was included our model but the only
+two categories taken accounted for whether "notalk" and "dubious," 
+our model would predict it was it fit the dubious category. However, 
+if the "ok" was included in teh mix, tsi woulc change our predictive probablity.. 
 
-ggplot(data = movies_decades, mapping = aes(x = year, y = dom_Gross2013 )) +
-  geom_point() +
-  facet_grid(. ~ binary)
 
 
 
-```
-# Research Question 2: *Does the time period a movie came out in predict whether a movies fails or passes the Bechdel test?*
+
+
+# Research Question 1: *Does the time period a movie came out in predict whether a movies fails or passes the Bechdel test? Furthermore, are there another important predictors that can help us predict whether a movies passes or fails the Bechdel test?*
 
 
 
-```{r make-variable-binary, message = F, warning = F}
+```{r make-variable-binary, message = F, warning = F, echo=FALSE}
 
 movies1_0 <- movies_decades %>% 
  mutate(passfail= ifelse(binary =='PASS', 1, 0))
@@ -240,86 +279,16 @@ movies1_0 <- movies_decades %>%
 
 
 
+
 First, we ran a logistic regression model to see if decade alone can
-predict whether a movie passes or fails the bechdel test.
-
-
-```{r log-one-predictor, message = F, warning = F}
-
-
-
-
-m2 <- glm(passfail ~ decade,
-          data = movies1_0,
-          family = "binomial")
-summary(m2) 
-
-exp( 0.7679 )
-exp(  0.9690 )
-exp(0.8117  )
-```
-
-
-According to our model, the odds of a movie from the 1990s to pass the Bechdel
-is estimated to be 2.155236
-times the odds of a movie from the 1970's to pass the test.
- 
-Furthermore, according to our model, the odds of a movie from the 2000s to
-pass the Bechdel is estimated to be  2.635308 times the odds of a movie from 
-the 1970's to pass the test.
-
-Lastly,according to our model, the odds of a movie from the 2000s to pass 
-the Bechdel is estimated to be  2.251733 times the odds of a movie from 
-the 1970's to pass the test.
- 
- 
-However, 
+predict whether a movie passes or fails the bechdel test. 
 
 
 
 
 
 
-# lets run this model but multinomially
-
-
-```{r multinomial, message = F, warning = F}
-
- 
-library(nnet)
-
-
-movie_dummy <- movies1_0 %>% 
-group_by(clean_test) %>% 
-mutate(ok_clean = case_when(clean_test=='ok' ~'Aok',
-                         clean_test=='men' ~'men',
-                         clean_test=='dubious'~'dubious',
-                     clean_test== 'notalk' ~ 'notalk',
-                     clean_test== 'nowomen' ~ 'nowomen'))
-
-
-  
-
-m2 <- multinom(ok_clean ~ decade + budget_Gross2013 +dom_Gross2013 
-               + int_Gross2013,
-          data = movie_dummy)
-summary(m2) 
-
-
-
-```
-
-
-
-While holding all the over variables in our model constant, for every one year increase in the year a given was released, the odds of whether the given film is 
-
-
-However, we also wanted to see if we would see a similar result if we add
-additional variables to the mix. We thus decideid to engage in varable selection methods to evaluate what would be the most model to predict whether a movie passes or fails the bechdel test.
-
-
-
-```{r LASSO, message = F, warning = F}
+```{r LASSO, message = F, warning = F, echo= FALSE}
 
  
   y <- movies1_0$passfail
@@ -365,7 +334,7 @@ Through this method we are able to see that our test is pretty good since the mo
 
 
 
-```{r log-predict-passfail, message = F, warning = F}
+```{r log-predict-passfail2323, message = F, warning = F}
 
  
   
@@ -423,7 +392,7 @@ The AUC (area under the curve) can be used to assess how well we are predicting,
 
 
 
-```{r log-predict-passfail, message = F, warning = F}
+```{r log-predict-passfail3, message = F, warning = F}
 
  
   library(Stat2Data)
@@ -436,7 +405,7 @@ emplogitplot1(passfail ~ dom_Gross2013,
 ```
 
 
-```{r log-predict-passfail, message = F, warning = F}
+```{r log-predict-passfailll, message = F, warning = F}
 
  
   library(Stat2Data)
@@ -481,7 +450,7 @@ those who fail it in
 terms of generated domestic gross across the 1970-2013 period.
 
 
-```{r how-many-movies2-passed-test-across-decades, message = F, warning = F}
+```{r how-many-movies2333-passed-test-across-decades, message = F, warning = F}
 
 
 
