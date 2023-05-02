@@ -7,13 +7,17 @@ format: pdf
 # Introduction and Data
 
 
+
 ```{r read-data, message = F, warning = F}
 library(tidyverse)
 library(ggfortify)
+library(viridis)
 library(tidymodels)
 library(ggplot2)
 library(car)
 library(leaps)
+library(broom)
+library(knitr)
 library(dplyr)
 library(MASS)
 library(lme4)
@@ -34,15 +38,44 @@ However, merely having female prtagaonsits does not paint the ful picture if whe
 
 
 Does the decade a movie was released predict whether it passes the bechdel test (logistic regression)
+will this change if we look at the variable in a multinomial fashion?
+
+Does passing the bechdel test predict how much a movie is going to make while controllung for the budger???
 
 
 
 
 
 
-```{r two-linear-models, message = F, warning = F}
+```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
 
-movies_decades <- movies %>% 
+
+
+# rename columns
+
+
+colnames(movies)[which(names(movies) == "domgross_2013$")] <- "dom_Gross2013"
+colnames(movies)[which(names(movies) == "budget_2013$")] <- "budget_Gross2013"
+colnames(movies)[which(names(movies) == "intgross_2013$")] <- "int_Gross2013"
+
+#remove NAs
+
+
+movies1 <- movies[!(movies$dom_Gross2013=="#N/A" | movies$budget_Gross2013 =="#N/A"),]
+
+movies1$ dom_Gross2013<- as.numeric(movies1$dom_Gross2013)
+movies1$ budget_Gross2013 <- as.numeric(movies1$budget_Gross2013)
+movies1$ int_Gross2013<- as.numeric(movies1$int_Gross2013)
+
+#change units to a million
+
+movies2 <- movies1 %>% 
+  mutate(dom_gross_mil = dom_Gross2013 /1000000) %>% 
+  mutate(int_gross_mil = int_Gross2013 /1000000) %>% 
+    mutate(  budget_mil = budget_Gross2013 /1000000)
+
+
+movies_decades <- movies2 %>% 
   mutate(decade= case_when(year < 1980 ~ '1970s' ,
                          1980<= year & 1990 > year ~ '1980s' ,
                          1990<= year & 2000 > year ~ '1990s' ,
@@ -53,13 +86,100 @@ movies_decades <- movies %>%
   geom_bar()
 
 
+movies_decades %>% 
+  group_by(decade) %>% 
+  summarise(number_of_movies =n())
 
+movies_decades %>%
+  group_by(decade) %>%
+  summarize(passed_movies = sum(binary == 'PASS'))
+
+
+proportion_70s = 14/ 54
+proportion_80s = 36 / 125
+proportion_90s = 147/ 337
+proportion_2000s = 409/ 840
+proportion_2010s = 197/ 438
+
+
+
+```
+
+
+
+
+```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+
+
+  
+  ggplot(data= movies_decades, mapping= aes(x=decade, fill=clean_test)) +
+  geom_bar()
 
 
 
 
 
 ```
+
+clean_ test: categories
+
+men= women only about men
+not talk= women do not talk to each other
+ok= passed
+no women= no women in the film
+dubious = unclear
+
+
+```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+
+
+  
+  ggplot(data= movies_decades, mapping= aes(x= binary, y= dom_gross_mil)) +
+  geom_boxplot()
+
+
+
+
+
+```
+
+
+ ^^^ this looks bad but I do not think this difference is significant (lots of factors we are not controlling for)
+ 
+ 
+ 
+
+```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+
+
+
+
+
+ggplot(data = movies_decades, mapping = aes(x = year, y = dom_gross_mil )) +
+  geom_point() +
+  facet_grid(. ~ binary)
+
+
+
+```
+
+
+```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
+
+
+
+
+
+m1 <- lm(dom_gross_mil ~ binary + budget_mil + decade, data = movies_decades)
+summary(m1) %>% 
+  tidy() 
+
+
+
+```
+
+
+p= 0.000002595824
 
 ##Sources
 
