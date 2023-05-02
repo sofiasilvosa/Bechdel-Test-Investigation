@@ -4,7 +4,8 @@ author: "Sofia Silvosa"
 format: pdf 
 ---
 
-# Introduction and Data
+# Introduction 
+
 
 
 
@@ -28,23 +29,46 @@ movies <- read_csv("movies.csv")
 
 ```
 
+# Background and Significance:
+
+
+
 There has been recent discussion on adequation representation in film.
 The movie industry has changed a lot in the past couple of decades due to
 increased advocady for diversity and inclusion. Over th years, we have
 seen more BIPOC representation in entertainement as well as gender identity
-and LGBTQ+ representation. Many in the film industry have also championed the increased representaion of women in film. For a while Hollywood procudced very little movies with female protagonists; let alone movies with apprpropirayte representation of women (Goodman, 2017). But there has been recent progress in the recent years with an impressive increase in female lead movies in the 2010s; not only that but these films have achived monetary sucesss. In 2016 with, 29 percent of protagonists in the top 100 box-office hits were women (Goodman, 2017)
+and LGBTQ+ representation. Many in the film industry have also championed the
+increased representaion of women in film. For a while Hollywood procudced 
+very little movies with female protagonists; let alone movies with apprpropirayte 
+representation of women
+(Goodman, 2017). But there has been recent progress in the recent years with 
+an impressive increase in female lead movies in the 2010s; not only that but
+these films have achived monetary sucesss. In 2016 with, 29 percent of 
+protagonists in the top 100 box-office hits were women (Goodman, 2017)
 
-However, merely having female prtagaonsits does not paint the ful picture if whether a movie actually does a good job in female representation. Many have used the so-called Bechdel test to make this judgement. The Bechdel test is
+However, merely having female prtagaonsits does not paint the full picture if
+whether a movie actually does a good job in female representation. 
+Many have used the so-called Bechdel test to make this judgement.
+The Bechdel test is
+
+# Data:
 
 
-Does the decade a movie was released predict whether it passes the bechdel test (logistic regression)
+
+
+
+# Research Question & Hypothesis
+
+Does the decade a movie was released predict whether it passes 
+the bechdel test (logistic regression)
 will this change if we look at the variable in a multinomial fashion?
 
-Does passing the bechdel test predict how much a movie is going to make while controllung for the budger???
+Does passing the bechdel test predict how much a movie is going to
+make while controllung for other important variables?
 
 
 
-
+#Exploratory Data Analysis
 
 
 ```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
@@ -83,7 +107,7 @@ movies_decades <- movies2 %>%
                        2010 <= year ~ '2010s ' ))  
   
   ggplot(data= movies_decades, mapping= aes(x=decade, fill=binary)) +
-  geom_bar()
+  geom_bar(position = "fill")
 
 
 movies_decades %>% 
@@ -104,7 +128,16 @@ proportion_2010s = 197/ 438
 
 
 ```
-
+We can see above that there is general upward trend across
+the decades with an increased percentage of movies that pass the 
+Bechdel test. We see, specifically that the movies from our data set
+that premiered in the 2000s, about 48% of the films passed the Bechdel test.
+The 2010s performed in a similar fashion, with 45% of the films released
+passing the Bechdel test (it is important to note however that this
+data set only includes movies till 2013, thus it does not paint the
+full picture of female representation in film.) The decade with'the lowest
+percentage of movies that passed the Bechdel test was teh 1970s, with
+only 25% passing.
 
 
 
@@ -140,7 +173,6 @@ dubious = unclear
 
 
 
-
 ```
 
 
@@ -162,24 +194,85 @@ ggplot(data = movies_decades, mapping = aes(x = year, y = dom_gross_mil )) +
 
 
 ```
+# Research Question 2: *Does the time period a movie came out in predict whether a movies fails or passes the Bechdel test?*
+
+
+
+
+```{r log, message = F, warning = F}
+
+
+m1 <- glm(Legendary ~ HP + Attack + Defense + Sp..Atk + Sp..Def + Speed, 
+          data = pokemon,
+          family = "binomial")
+summary(m1)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+# Research Question 2: *does passing or failing the Bechdel test predict whether a film's financial success?*
+
+
+
+Our Model is as follows for each Bechdel test result i: 
+
+
+$Domestic Gross =\beta_0 + \beta_1(Budget)_i + \beta_2(Year)_i + \beta_2(Year) + \beta_3I(BinaryResult)  + \epsilon_i$ 
+ 
+We will run a hypothesis at the $a$ = 0.05 level.
+
+
+Nulll hypothesis: 
+
+$H_0: \beta_3 = 0$
+
+There is no difference between movies who pass the Bechdel test and 
+those who fail it in 
+terms of generated domestic gross across the 1970-2013 period.
+
+
+Alternative Hypothesis:
+
+$H_1: \beta_3  \neq \ 0$ 
+
+There is a difference between movies who pass the Bechdel test and
+those who fail it in 
+terms of generated domestic gross across the 1970-2013 period.
 
 
 ```{r how-many-movies-passed-test-across-decades, message = F, warning = F}
 
 
 
-
-
-m1 <- lm(dom_gross_mil ~ binary + budget_mil + decade, data = movies_decades)
-summary(m1) %>% 
-  tidy() 
+m1 <- lm(dom_gross_mil ~ binary + budget_mil + year  , data = movies_decades)
+summary(m1) 
 
 
 
 ```
+Results: Our formal hypothesis test reveals that we have a t-statistic of -2.590
+with 1772 degrees of freedom. The distribution of the test 
+statistic under the null hypothesis
+in this case will be a t distribution.
+
+In this case we fail reject the null hypothesis because our p-value of 0.608 
+is greater than our established statistically significant level of 0.05.
+In other words, in this model-- in which we are holding all other
+variables constant-- we do not have sufficient evidence to demonstrate a 
+a significant difference between movies that pass the Bechdel test and those
+that fail in 
+terms of domestic gross.
 
 
-p= 0.000002595824
 
 ##Sources
 
