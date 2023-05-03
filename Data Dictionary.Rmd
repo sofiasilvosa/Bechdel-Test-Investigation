@@ -1,0 +1,73 @@
+--- 
+title: "Data Dictionary" 
+author: "Sofia Silvosa" 
+format: pdf 
+---
+
+*year*: Year the film was released (1970-2013)
+
+*imdb*: Imdb ID
+
+*title*: Movie Title
+
+*cleantest*: Score dictating whether the given film passed the Bechdel test
+('ok') or if it failed it or how it failed it (notalk, nowomen or men) or
+if the test results were inclusive (dubious).
+
+
+*test*: Unedited version of clean test-- includes the same levels with
+including a '-disagree- string if the result of the test was
+debated on such as "notalk-disagree."
+
+*budget*: amount of money that ncludes all costs relating to the 
+development, production, and post-production of the film (not accouting
+for inflation)
+
+*domgross* :total box office revenue earned by a movie in the U.S (not
+accounting for inflation) 
+
+*intgross*:total box office revenue earned by a 
+movie in countries outside of its country of origin or primary release (not
+accounting for inflation)
+
+*code*: variable that combines the year and binary variable (ex: 1970- FAIL)
+
+*binary*: binary variable illustrating whether the given film passed (PASS) or
+failed (FAIL) the Bechdel Test
+
+*budget_Gross2013*: amount of money that ncludes all costs relating to the 
+development, production, and post-production of the film (converted
+to 2013 dollars)
+
+*dom_Gross2013* :total box office revenue earned by a movie in the U.S
+(converted to 2013 dollars) 
+
+*int_Gross2013* :total box office revenue earned by a 
+movie in countries outside of its country of origin or primary 
+release (converted
+to 2013 dollars)
+
+*periodcode* :  dictates different periodic periods of film in regards to the
+FiveThirtyEight's teams knowledge of the film industry on a categorical,
+multinomial scale of 1,2,3,4 and 5-- not much more detailed was revealed
+by the authors regarding the criteria for the periods.
+
+
+*decadecode* : decade in which the film was released:
+- 1: 1970-1979
+- 2: 1980- 1989
+- 3: 1990- 1999
+- 4: 2000- 2009
+- 5: 2010- 2013
+
+
+
+
+
+
+
+
+
+
+
+
