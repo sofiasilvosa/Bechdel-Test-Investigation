@@ -31,8 +31,6 @@ movies <- read_csv("movies.csv")
 ```
 
 *Background and Significance:*
-
-
 There has been recent discussion on adequate female representation in film.
 Many in the film industry have recently praised the
 increased representation of women in film (Nolfi,2017). For a while Hollywood produced
@@ -41,9 +39,13 @@ representation of women
 (Goodman, 2017). But there has been recent progress in the recent years with 
 an impressive increase in female lead movies in the 2010s; not only that but
 these films have achieved monetary success. In 2016 with, 29 percent of 
-protagonists in the top 100 box-office hits were women (Goodman, 2017) However, merely having female protagonists does not paint the full picture if whether a movie actually does a good job in female representation.  Many have used the so-called Bechdel test to make this judgement. This test
+protagonists in the top 100 box-office hits were women (Goodman, 2017) However,
+merely having female protagonists does not paint the full picture if
+whether a movie actually does a good job in female representation. 
+Many have used the so-called Bechdel test to make this judgement. This test
 was developed by Allison Bechdel in 1985 and has recently become a digital
-sensation (Hickey, 2014).The Bechdel test is a simple test which deems that a movie has adequate 
+sensation (Hickey, 2014).The Bechdel test is a simple test which deems that
+a movie has adequate 
 female character in their film if it passes the following three criteria:
 (1) it has to have at least two women in it, who (2) who talk to each other, 
 about (3) something besides a man (https://bechdeltest.com/) .
@@ -56,13 +58,14 @@ initiatives and more women at the helm of the film industry
 we would expect more recent films, specially those of the 2000s and 2010s, to
 have a greater amount of films that pass the Bechdel test. 
 
-# Research Question & Hypothesis
-
-
+*Research Question & Hypothesis*
 We're interested in evaluating what variables are important in
 predicting whether a movie passes or fails
 the Bechdel test. We are interested specifically if the time period
-in which a movie was released predicts whether a movie passes the Bechdel test. In other words, does the decade a movie was released predict whether it passes  the Bechdel test while controlling for other pivotal variables in our model? As shown by recent news and media, more modern movies seem to have more
+in which a movie was released predicts whether a movie passes the Bechdel test.
+In other words, does the decade a movie was released predict whether it passes
+the Bechdel test while controlling for other pivotal variables in our model? 
+As shown by recent news and media, more modern movies seem to have more
 increased representation of women in their films. Thus, we predict that 
 the time period in which a movie was released will play a significant role
 in whether the movie fails or passes the Bechdel test. More specially,
@@ -71,15 +74,17 @@ percentage of movies that pass the Bechdel rather than those that came
 out in the 20th century represented in our data set.
 
 *Data*
-
 To explore our research quetsion, we'll be using a data set used in the
 FiveThirtyEight story titled “The Dollar-And-Cents Case Against Hollywood’s
-Exclusion of Women” (Hickey, 2014). The data set includes observations from 1794 films 
+Exclusion of Women” (Hickey, 2014). The data set includes observations from 
+1794 films 
 that were released between 1970-2013.The data set was organized by combining
 data from two major sources. One of them came from the BechdelTest.com: a 
 website operated by committed moviegoers who analyze films and 
 ascertain if they pass the Bechdel test. To provide financial 
-information for the chosen films, the FiveThirtyEight team gathered data from the website The-Numbers.com, a leading site for box office and budget data. The finalized *movies.cv* data set includes information
+information for the chosen films, the FiveThirtyEight team gathered data 
+from the website The-Numbers.com, a leading site for box office and budget 
+data. The finalized *movies.cv* data set includes information
 detailing the title of the film, the year it was released, its domestic gross, 
 budget and international gross (both accounting for inflation at the time 
 of data collection and without). See Data Dictionary for more details.
@@ -103,9 +108,11 @@ values to illustrated whether the movies passed (passfail=1) failed
 (passfail=0) the Bechdel test. We excluded 18 observations from our final
 analysis. These observations had no values for their total domestic gross 
 and total budget. These are variables of interest that important variables that
-we want to control for .Since we still had 1776 left in our data set, our statistical analyses will not be greatly affected by the removal of these observations.
+we want to control for .Since we still had 1776 left in our data set, our 
+statistical analyses will not be greatly affected by the removal
+of these observations.
 
-#Exploratory Data Analysis
+*Exploratory Data Analysis*
 ```{r adding-new-variables, message = F, warning = F, echo= FALSE}
 
 # rename columns
@@ -180,15 +187,14 @@ that premiered in the 2000s, about 48% of the films passed the Bechdel test.
 The 2010s performed in a similar fashion, with 45% of the films released
 passing the Bechdel test (it is important to note however that this
 data set only includes movies till 2013, thus it does not paint the
-full picture of female representation in film from this decade) The decade with the lowest
+full picture of female representation in film from this decade) The decade 
+with the lowest
 percentage of movies that passed the Bechdel test was the 1970s, with
 only 25% passing. Below we also see a similar trend when looking years as 
 our independent variable and with clean test as our dependent variable,
 revealing that films released in the 21st century have a higher percentage
 of movies that pass the Bechdel test. Moreover, we also see that no women
 talk seems to be the most common reason for a movie to fail the Bechdel test.
-
-
 
 ```{r graph, message = F, warning = F, echo= FALSE}
 
@@ -208,7 +214,6 @@ movies1_0 <- movies_decades %>%
 
 ```
 #Methodolody
-
 We are interested in running a regression model in order to evaluate
 whether the time period a given film was released. Furthermore, we
 are interested in using the binary variable "passfail" as our
@@ -220,7 +225,8 @@ are independent from each other and knowing something about one of our
 observations does not reveal anything substantial about another 
 observation.
 
-We chose to use the binary 
+
+For our outcome variable, we chose to use the binary 
 version detailing whether given film's performance on the Bechdel test rather
 than our clean_test variable because we felt that a binary outcome variable 
 would generate a simpler model. Furthermore, if we ran a logistic model
@@ -229,9 +235,11 @@ regression model to test out our research question. A multinomial regression
 model would not
 make sense in this context the since the independence of irrelevant alternatives
 assumption would be violated. This assumption assumes that, in a
-multinomial logistic regression model, the relative odds of choosing one option over another
+multinomial logistic regression model, the relative odds of choosing one 
+option over another
 should not be influenced
-by the inclusion or exclusion of an additional option. This does not make sense since the inclusion or exclusion 
+by the inclusion or exclusion of an additional option. This does not make
+sense since the inclusion or exclusion 
 of a Bechdel test failing category could have an effect on our final analysis. 
 For example, if a given film with plentiful female representation that was 
 released in 2013 (which according to our hypothesis means it has a greater
@@ -241,37 +249,17 @@ our model would predict it was it fit the dubious category. However,
 if the "ok" was included in the mix, this would change our predictive probablity.
 
 Next, we evaluated whether to use the "year" or "decade" variable for
-our investigation. On one hand, the year variable is continouus, allowing
+our investigation. On one hand, the year variable is continuous, allowing
 us to have greater statistical power. On the other hand, the categorical
 "decade" variable applies more to our question of interest and the context
 of the data set. The film industry has gone through distinct decade period;
 many film research that tackles chronically change discuss the changes
-through decades, not years.
-
-To decide which variable to use, we first calculated the RMSE for the variables.
-
-*Model 1:*
-
-$PassFail =\beta_0 + \beta_1(1980s)_i + \beta_2(1990s)_i + \beta_2(2000s) +\beta_3I(2010s)$ 
-
-*Model 2: *
+through decades, not years. To decide which variable to use, we 
+checked whether our continuous variable
+"year" passed the linearity assumption.
 
 
-$PassFail =\beta_0 + \beta_1(year)+  \epsilon_ $ 
-
-We calculate the Root Mean Squared Errors for the two models
-to see which predictor variable would be the smartest to use:
-
-We found that our first model had a RMSE for our first model was 0.8505231
-and for our second model the RMSE was 0.8373541. Thus, we decided to
-use the second model for our analysis.
-
-
-However, since we are using a logistic model, we are interested in seeing
-if it meets the logistic regression assumptions. And since year is a
-continous variable we decided to see if it met our linearity condition.
-
-```{r log-linearity, message = F, warning = F, echo= FALSE}
+```{r log-linearity, message = F, warning = F, echo= FALSE, out.width="70%"}
 
  
   library(Stat2Data)
@@ -280,30 +268,33 @@ emplogitplot1(passfail ~ year,
               ngroups = 10)
 
 
-# nice
+
 ```
 
-Points are not evenly scattered therefore we have decided that this
+As shown above, the points are not evenly scattered therefore we have decided that this
 is not an appropriate variable to use in our model and instead will use decade.
-We could have transformed the variable,  quadratically for example
+We could have transformed the variable, quadratically for example
 in order to pass this linearity assumption. However, this will complicate
 our interpretation of our model gravely since our outcome variable of
 interest would be transformed. Thus, for the purposes of our 
-investigation, we will use the decades variable.
-
+investigation, we will use the decades variable. For our other predictor variables,
+we are interested in using international gross, domestic gross, budget and
+an interaction between international gross and domestic gross. These
+variables have been shown to affect Bechdel test results in the past (Hickey, 2014) thus
+we thought it would be smart to control for these variables in our model.
+Furthermore, we chose to introduce an interaction term between domestic 
+gross and international gross because these two variables tend to depend on
+each other (when a movie does well internationally this depends on its domestic
+sucesss since movie industries usually stop investing in marketing for
+the film if the film performs poorly domestically first).
 
 We also checked to see if the linearity condition was met for our other
-continuous predictors. Only the budget variable passed the linearity
+continuous predictors (see Appendix for linearity plots for non-transformed variables). 
+Only the budget variable passed the linearity
 assumption.
 
 
-```{r lin-assumption, message = F, warning = F, echo=FALSE}
-
- 
-  library(Stat2Data)
-emplogitplot1(passfail ~ dom_Gross2013,
-              data = movies1_0,
-              ngroups = 10)
+```{r lin-assumption, message = F, warning = F, echo=FALSE, out.width="70%"}
 
 
  library(Stat2Data)
@@ -316,10 +307,6 @@ emplogitplot1(passfail ~ budget_Gross2013,
               data = movies1_0,
               ngroups = 10)
 
- library(Stat2Data)
-emplogitplot1(passfail ~ (int_Gross2013),
-              data = movies1_0,
-              ngroups = 10)
 
 
 # transformed int variable because it violated one of our assymptions
@@ -347,16 +334,9 @@ a particular variable of high interest, our final result interpretations'
 simplicity won't be gravely affected.
 
 
-Furthermore, to further evaluate which variables to include in our data set,
-we ran a LASSO to determine if our variables of interest should be included 
-in our model. They were all included thus we decided to include them in our
-model. We also decided to introduce an interaction term of intGross2013 *
-domGrpss2013 since in real life they depend on each other.
-
-
 This is our proposed model that we will use to investigate our research question:
 
- For each deccade the film premiered in $i$,
+For each deccade the film premiered in $i$,
 
 
 $p / (1- p)$ = Odds of passing the Bechdel Test
@@ -365,33 +345,9 @@ $p / (1- p)$ = Odds of passing the Bechdel Test
 $log(p / (1-p) =\beta_0 + \beta_1(Budget)_i + \beta_2(log(IntGross))_i + \beta_3(log(DomGross)) + \beta_4I(decade1980s)_i  +   \beta_5I(decade1990s)_i  +   \beta_6I(decade2000s)_i     +   \beta_7I(decade2010s)_i   +  \beta_8(log(IntGross))_i * log(DomGross_i) $ 
 
 
-```{r LASSO, message = F, warning = F, echo= FALSE}
 
- 
-  y <- movies1_0$passfail
-x <- model.matrix(passfail ~ year + budget_Gross2013 +dom_Gross2013 +
-                    log(int_Gross2013) + dom_Gross2013 * int_Gross2013 ,
-                  data = movies1_0)
-library(glmnet) # (has LASSO-related functions here)
-m_lasso_cv <- cv.glmnet(x, y, alpha = 1)
-
-best_lambda <- m_lasso_cv$lambda.min
-best_lambda
-
-m_best <- glmnet(x, y, alpha = 1, lambda = best_lambda)
-m_best$beta
-
-plot(m_lasso_cv)
-
-
-#summary(m_all)$cp
-#summary(m_all)$rsq
-#summary(m_all)$bic
-
-```
 
 ## Results
-
 
 *Hypothesis Test*
 We ran a logistic regression model using the final model discussed 
@@ -407,7 +363,7 @@ Our model is as follows. For each deccade the film premiered in $i$,
 $p / (1- p)$ = Odds of passing the Bechdel Test
 
 
-$log(p / (1-p) =\beta_0 + \beta_1(Budget)_i + \beta_2(log(IntGross))_i + \beta_3(DomGross) + \beta_4I(decade1980s)_i  +   \beta_5I(decade1990s)_i  +   \beta_6I(decade2000s)_i     +   \beta_7I(decade2010s)_i   +  \beta_8(log(IntGross))_i * DomGross_i +     \epsilon_i$ 
+$log(p / (1-p) =\beta_0 + \beta_1(Budget)_i + \beta_2(log(IntGross))_i + \beta_3(DomGross) + \beta_4I(decade1980s)_i  +   \beta_5I(decade1990s)_i  +   \beta_6I(decade2000s)_i     +   \beta_7I(decade2010s)_i   +  \beta_8(log(IntGross))_i * DomGross_i$
  
 We will run a hypothesis at the $a$ = 0.05 level.
 
@@ -486,7 +442,7 @@ m22 <- glm(passfail ~ decade+ budget_Gross2013 +log(dom_Gross2013) +
              log(int_Gross2013) + log(int_Gross2013) * log(dom_Gross2013),
           data = movies1_0,
           family = "binomial")
-summary(m22)
+
 
 
 
@@ -496,7 +452,7 @@ summary(m22)
 
 This is final our model:
 
-$\widehat{logit(PassFail)} = 1.23  -6.323e-09 (Budget)_i +  6.169e-02(log(IntGross))_i + 0.182log((DomGross))  -0.0304507	I(decade1980s)_i  + 0.6285726	I(decade1990s)_i  +   0.8578170I(decade2000s)_i     +   	0.6952480I(decade2010s)_i   -7.744e-03 \beta_8(log(IntGross))_i * DomGross_i $
+$\widehat{logit(PassFail)} = 1.23  -6.323e-09 (Budget)_i +  6.169e-02(log(IntGross))_i + 0.182log((DomGross))  -0.0304507	I(decade1980s)_i  + 0.6285726	I(decade1990s)_i  +   0.8578170I(decade2000s)_i     +   	0.6952480I(decade2010s)_i   -7.744e-03 \beta_8(log(IntGross))_i * DomGross_i$
 
 
 *Coefficient Interpretations*
@@ -665,4 +621,22 @@ https://ew.com/oscars/2017/07/03/oscars-2017-new-members-diversity-push/
 ```
 
 
+
+```{r how-many-mov, message = F, warning = F, echo= FALSE}
+
+
+  library(Stat2Data)
+emplogitplot1(passfail ~ (int_Gross2013),
+              data = movies1_0,
+              ngroups = 10)
+
+ 
+
+  library(Stat2Data)
+emplogitplot1(passfail ~ dom_Gross2013,
+              data = movies1_0,
+              ngroups = 10)
+
+
+```
 
