@@ -577,11 +577,7 @@ emplogitplot1(passfail ~ dom_Gross2013,
 ```{r lin-assumption, message = F, warning = F, echo=FALSE}
 
 
- library(Stat2Data)
-emplogitplot1(passfail ~ (dom_Gross2013),
-              data = movies1_0,
-              ngroups = 10)
-
+ 
 library(Stat2Data)
 emplogitplot1(passfail ~ log(dom_Gross2013),
               data = movies1_0,
@@ -595,10 +591,7 @@ emplogitplot1(passfail ~ budget_Gross2013,
               ngroups = 10)
 
 
- library(Stat2Data)
-emplogitplot1(passfail ~ (int_Gross2013),
-              data = movies1_0,
-              ngroups = 10)
+
 
  library(Stat2Data)
 emplogitplot1(passfail ~ log(int_Gross2013),
