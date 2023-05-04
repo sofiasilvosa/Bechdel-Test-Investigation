@@ -578,9 +578,16 @@ emplogitplot1(passfail ~ dom_Gross2013,
 
 
  library(Stat2Data)
+emplogitplot1(passfail ~ (dom_Gross2013),
+              data = movies1_0,
+              ngroups = 10)
+
+library(Stat2Data)
 emplogitplot1(passfail ~ log(dom_Gross2013),
               data = movies1_0,
               ngroups = 10)
+
+
 
   library(Stat2Data)
 emplogitplot1(passfail ~ budget_Gross2013,
@@ -589,13 +596,18 @@ emplogitplot1(passfail ~ budget_Gross2013,
 
 
  library(Stat2Data)
+emplogitplot1(passfail ~ (int_Gross2013),
+              data = movies1_0,
+              ngroups = 10)
+
+ library(Stat2Data)
 emplogitplot1(passfail ~ log(int_Gross2013),
               data = movies1_0,
               ngroups = 10)
 
 
  library(Stat2Data)
-emplogitplot1(passfail ~ log(int_Gross2013) * dom_Gross2013,
+emplogitplot1(passfail ~ (log(dom_Gross2013) * log(int_Gross2013)),
               data = movies1_0,
               ngroups = 10)
  
