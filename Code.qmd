@@ -203,11 +203,12 @@ movies1_0 <- movies_decades %>%
 
 
 ```
-#Methodolody
+# Methodolody
 We are interested in running a logistic regression model in order to evaluate
-whether the time period a given film was released in is associated with its score
-on the Bechdel test. We believe this is an appropriate model, firstly, because 
-our data passes the independence assumption. We can assume that independence is
+whether the time period a given film was released in is associated with its
+scoreon the Bechdel test. We believe this is an appropriate model,
+firstly, because our data passes the independence assumption. We can
+assume that independence is
 met because our observations are most likely not correlated with each other. 
 Each of our movie titles are independent from each other and knowing something 
 about one of our observations does not reveal anything substantial about another 
@@ -429,8 +430,7 @@ m2_aug %>%
   ) %>% 
   kable()
   
-table(m2_aug$pred_leg, m2_aug$passfail) %>% 
-  kable()
+
 
  
 
@@ -487,7 +487,8 @@ because of the limitations our investigation faced. Firstly,
 our model had an uneven amount of films that premiered in our decades
 of interest. We had 54 observations for the 1970s, 125 observations for
 1980s, 337 for 1990s, 840 for the 2000s and 438 for the 2010s (see Appendix 
-for summary statistics). This could have, in turn, affected our statistical inference 
+for summary statistics). This could have, in turn, affected our statistical 
+inference 
 since there was an unbalance of observations for each level of our predictor 
 variables. Another limitation is the fact some of the coefficients
 in our model are pretty difficult to interpret due to our inclusion of 
@@ -506,14 +507,17 @@ the Bechdel test than others.
 
 ## Sources
 
-https://socialsciences.ucla.edu/wp-content/uploads/2022/03/UCLA-Hollywood-Diversity-Report-2022-Film-3-24-2022.pdf
+https://socialsciences.ucla.edu/wp-content/uploads/2022/03/UCLA-Hollywood-
+Diversity-Report-2022-Film-3-24-2022.pdf
 
 https://www.nytimes.com/2017/02/21/movies/women-protagonists-movies-2016.html
-https://www.tandfonline.com/doi/pdf/10.1080/14680777.2016.1234239?needAccess=true
+https://www.tandfonline.com/doi/pdf/10.1080/14680777.2016.1234239?
+needAccess=true
 
 https://bechdeltest.com/
 
-https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-hollywoods-exclusion-of-women/
+https://fivethirtyeight.com/features/the-dollar-and-cents-case-against-
+hollywoods-exclusion-of-women/
 
 https://ew.com/oscars/2017/07/03/oscars-2017-new-members-diversity-push/
 
