@@ -150,7 +150,7 @@ labs(title="The % of films that pass the Bechdel Test has increased through time
 
 table <- movies_decades %>% 
   group_by(decade) %>% 
-  summarise(number_of_movies =n()) %>% 
+  summarise(number_of_movies =n()) 
 
 
 table2 <- movies_decades %>%
@@ -193,6 +193,8 @@ talk seems to be the most common reason for a movie to fail the Bechdel test.
 ```{r graph, message = F, warning = F, echo= FALSE}
 
 
+movies1_0 <- movies_decades %>% 
+ mutate(passfail= ifelse(binary =='PASS', 1, 0))
   
   ggplot(data= movies_decades, mapping= aes(x= year, fill=clean_test)) +
   geom_bar()+
@@ -263,31 +265,6 @@ to see which predictor variable would be the smartest to use:
 We found that our first model had a RMSE for our first model was 0.8505231
 and for our second model the RMSE was 0.8373541. Thus, we decided to
 use the second model for our analysis.
-
-```{r year-or-decade, message = F, warning = F, echo= FALSE}
-
-
-
-m11 <- glm(passfail ~ decade, 
-          data = movies1_0,
-          family = "binomial")
-summary(m11)
-
-
-m22 <- glm(passfail ~ year,
-          data = movies1_0,
-          family = "binomial")
-summary(m22)
-
-
-m11_aug <- augment(m11); m22_aug <- augment(m22)
-
-rmse(m11_aug, `passfail`, estimate = .fitted)
-
-rmse(m22_aug, `passfail`, estimate = .fitted)
-
-```
-
 
 
 However, since we are using a logistic model, we are interested in seeing
@@ -416,7 +393,7 @@ plot(m_lasso_cv)
 ## Results
 
 
-
+*Hypothesis Test*
 We ran a logistic regression model using the final model discussed 
 in the previous section
 to see if decade alone can
@@ -478,7 +455,16 @@ qf(p= 0.0002963195, 4 , 1776, lower.tail= FALSE)
 
 
 ```
-
+We will be conducing an F test for this formal hypothesis test. 
+The F statistic is 5.31495 and falls under an F distribution with 4
+numerators of degrees of freeom and 1776 denominator degrees of freedom.
+We reject the null hypothesis in this case since our p value is less than 
+0.05, meaning that at least one of our decade predictor levels has a slope
+that is not 0. There is sufficient evidence to suggest that the decade in
+which a moviepremiered in is associated with differential odds of the moving
+passing the Bechdel test, while controlling for all of the variables listed in
+the previous section (andadjusting for log(domGross), log(intgross) 
+and log(intgross)* log(domGross.)
 
 
 ```{r glm-model, message = F, warning = F, echo=FALSE}
@@ -508,24 +494,12 @@ summary(m22)
 ```
 
 
-This is our model:
-
-
+This is final our model:
 
 $\widehat{logit(PassFail)} = 1.23  -6.323e-09 (Budget)_i +  6.169e-02(log(IntGross))_i + 0.182log((DomGross))  -0.0304507	I(decade1980s)_i  + 0.6285726	I(decade1990s)_i  +   0.8578170I(decade2000s)_i     +   	0.6952480I(decade2010s)_i   -7.744e-03 \beta_8(log(IntGross))_i * DomGross_i $
 
 
-
-
-We will be conducing a z test for this formal hypothesis test. 
-The z statistic is 3.274 for the decades2000s variable and the z statistic
-is 2.818 for the decades2010s variable.
-Z has a standard normal distribution under the null hypothesis in this test. 
-
-We reject the null hypothesis in this case since our p value is less than 
-0.05 for two of our decade predictor variables
-(adjusting for log(domGross), log(intgross) and log(intgross)* log(domGross).
-
+*Coefficient Interpretations*
 
 While controlling for the variables in our model, the odds of passing the
 Bechdel test for a movie that premiered in the 2000s is estimated to be 2.358008
@@ -537,13 +511,7 @@ Bechdel test for a movie that premiered in the 2010s is estimated to be 2.004206
 times the odds of a film 
 that was released in the 1970s (adjusting for the our transformed variables).
 
-
-There is sufficient evidence to suggest that the decade in which a movie
-premiered in is associated with differential odds of the moving
-passing the Bechdel test, while
-controlling for all of the variables listed in the previous section.
-
-
+*Predictive Power*
 
 Even though our result was significant, we also want to check for 
 the predictive power of our model. We will thus check the obtain predicted
@@ -555,14 +523,7 @@ discrimination threshold changes. Calculating the area underneath the ROC curve
 will also give us more insight into the predictive power of our model.
 
 
-
-
-
-
-
-
-
-```{r how-many-movies2-passed-test-across-decades, message = F, warning = F, echo=FALSE}
+```{r prediction-power, message = F, warning = F, echo=FALSE}
 
 
 m2_aug <- augment(m22)
@@ -662,12 +623,7 @@ variable of domestic gross. If anyone wanted to use to inteprtret thhis
 speicific coefficinet from our model, the interpretation would be pretty 
 lackluster. Lastly, another limitation includes the lack of variables
 in our data set. Our data set only included 15 variables to begin with
-which have us a limited amount of variables to choose from. 
-
-
-
-There are many future directions that could be taken with this investigation.
-For starters, it could be interetsing to have a dataset that represents more
+which have us a limited amount of variables to choose from. There are many future directions that could be taken with this investigation. For starters, it could be interetsing to have a dataset that represents more
 decades (from the 1920s till 2020s). Furthermore, future investigations
 should include more variables in their model. It could be interesting
 to see if the number of women working on the film is associated with
@@ -675,11 +631,6 @@ the film's score on the Bechdel tets. The film genre could also be an
 interetsing variable to look at; it is possible that movies from 
 certain genres are predicted to have higher odds of passing 
 the Bechdel test than others. 
-
-
-
-
-
 
 
 ## Sources
@@ -705,7 +656,7 @@ https://ew.com/oscars/2017/07/03/oscars-2017-new-members-diversity-push/
 
   
   ggplot(data= movies_decades, mapping= aes(x= binary, y= dom_Gross2013)) +
-  geom_boxplot() %>% 
+  geom_boxplot() 
   
 
 
