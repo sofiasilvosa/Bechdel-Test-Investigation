@@ -36,11 +36,7 @@ Many in the film industry have recently praised the
 increased representation of women in film (Nolfi,2017). For a while Hollywood produced
 very little movies with female protagonists; let alone movies with appropriate 
 representation of women
-(Goodman, 2017). But there has been recent progress in the recent years with 
-an impressive increase in female lead movies in the 2010s; not only that but
-these films have achieved monetary success. In 2016 with, 29 percent of 
-protagonists in the top 100 box-office hits were women (Goodman, 2017) However,
-merely having female protagonists does not paint the full picture if
+(Goodman, 2017).However, merely having female protagonists does not paint the full picture if
 whether a movie actually does a good job in female representation. 
 Many have used the so-called Bechdel test to make this judgement. This test
 was developed by Allison Bechdel in 1985 and has recently become a digital
@@ -54,9 +50,7 @@ about (3) something besides a man (https://bechdeltest.com/) .
 Many have argued that there has been significant increase of female 
 representation throughout the decades thanks to increased diversity 
 initiatives and more women at the helm of the film industry 
-(UCLA-Hollywood-Diversity-Report-2022-Film). If this the case, then
-we would expect more recent films, specially those of the 2000s and 2010s, to
-have a greater amount of films that pass the Bechdel test. 
+(UCLA-Hollywood-Diversity-Report-2022-Film). 
 
 *Research Question & Hypothesis*
 We're interested in evaluating what variables are important in
@@ -87,9 +81,7 @@ from the website The-Numbers.com, a leading site for box office and budget
 data. The finalized *movies.cv* data set includes information
 detailing the title of the film, the year it was released, its domestic gross, 
 budget and international gross (both accounting for inflation at the time 
-of data collection and without). See Data Dictionary for more details.
-
-Furthermore, for our purposes, the data set also includes two important 
+of data collection and without). See Data Dictionary for more details.Furthermore, for our purposes, the data set also includes two important 
 columns regarding whether the movie passed or failed the Bechdel test. 
 The column "binary" specifically states whether the movie passed or 
 failed the Bechdel test in a binary fashion. The column "clean_test" goes a
@@ -97,9 +89,7 @@ bit more in detail, regarding
 how the film failed the Bechdel test or if it was unclear whether the movie 
 passed or not. The clean test variable has five levels: ok (Passed), no women
 (No women in the film), dubious (unclear result), no talk(women did not
-talk to each other), and men (women only talked about men.)
-
-We created new variables for the purposes of our analysis. For starters,
+talk to each other), and men (women only talked about men.)We created new variables for the purposes of our analysis. For starters,
 we created a decades variable that detailed which decade the given film
 was released in. The variable ended up having 5 different levels: 1970s,
 1980s, 1990s, 2000s and 2010s. We also created a new variable titled passfail
@@ -289,44 +279,9 @@ sucesss since movie industries usually stop investing in marketing for
 the film if the film performs poorly domestically first).
 
 We also checked to see if the linearity condition was met for our other
-continuous predictors (see Appendix for linearity plots for non-transformed variables). 
+continuous predictors (see Appendix for linearity plots for all linearity plots). 
 Only the budget variable passed the linearity
-assumption.
-
-
-```{r lin-assumption, message = F, warning = F, echo=FALSE, out.width="70%"}
-
-
- library(Stat2Data)
-emplogitplot1(passfail ~ log(dom_Gross2013),
-              data = movies1_0,
-              ngroups = 10)
-
-  library(Stat2Data)
-emplogitplot1(passfail ~ budget_Gross2013,
-              data = movies1_0,
-              ngroups = 10)
-
-
-
-# transformed int variable because it violated one of our assymptions
- library(Stat2Data)
-emplogitplot1(passfail ~ log(int_Gross2013),
-              data = movies1_0,
-              ngroups = 10)
-
-
- library(Stat2Data)
-emplogitplot1(passfail ~ log(int_Gross2013) * dom_Gross2013,
-              data = movies1_0,
-              ngroups = 10)
- 
-
-
-# nice
-```
-
-The linearity condition was met for our predictors dom_Gross2013 and
+assumption. The linearity condition was met for our predictors dom_Gross2013 and
 budget_Gross2013. However, it was not met for our Int_Gross2013 variable.
 In order to deal with this violation of our linearity assumption, we applied
 a log transformation to our int_Gross variable. Since, this is not 
@@ -392,15 +347,15 @@ or $\beta_7$ ) is not equal to zero.
 
 
   
-m22 <- glm(passfail ~ decade+ budget_Gross2013 +dom_Gross2013 +
-             log(int_Gross2013) + int_Gross2013 * log(dom_Gross2013),
+m22 <- glm(passfail ~ decade+ budget_Gross2013 +log(dom_Gross2013) +
+             log(int_Gross2013) + log(int_Gross2013) * log(dom_Gross2013),
           data = movies1_0,
           family = "binomial")
 
 
   
-m21 <- glm(passfail ~  budget_Gross2013 +dom_Gross2013 +
-             log(int_Gross2013) + int_Gross2013 * log(dom_Gross2013),
+m21 <- glm(passfail ~  budget_Gross2013 + log(dom_Gross2013) +
+             log(int_Gross2013) + log(int_Gross2013) * log(dom_Gross2013),
           data = movies1_0,
           family = "binomial")
 
@@ -417,7 +372,7 @@ numerators of degrees of freeom and 1776 denominator degrees of freedom.
 We reject the null hypothesis in this case since our p value is less than 
 0.05, meaning that at least one of our decade predictor levels has a slope
 that is not 0. There is sufficient evidence to suggest that the decade in
-which a moviepremiered in is associated with differential odds of the moving
+which a movie premiered in is associated with differential odds of the moving
 passing the Bechdel test, while controlling for all of the variables listed in
 the previous section (andadjusting for log(domGross), log(intgross) 
 and log(intgross)* log(domGross.)
@@ -426,22 +381,15 @@ and log(intgross)* log(domGross.)
 ```{r glm-model, message = F, warning = F, echo=FALSE}
 
 
-m22 <- glm(passfail ~ decade+ budget_Gross2013 +dom_Gross2013 +
-             log(int_Gross2013) + int_Gross2013 * log(dom_Gross2013),
-          data = movies1_0,
-          family = "binomial")
-summary(m22)$coef %>% 
-  kable()
-
-
-exp( 0.8578170)
-exp(0.6952480	)
-
 
 m22 <- glm(passfail ~ decade+ budget_Gross2013 +log(dom_Gross2013) +
              log(int_Gross2013) + log(int_Gross2013) * log(dom_Gross2013),
           data = movies1_0,
-          family = "binomial")
+          family = "binomial")  
+
+
+summary(m22)$coef %>% 
+  kable()
 
 
 
@@ -450,22 +398,24 @@ m22 <- glm(passfail ~ decade+ budget_Gross2013 +log(dom_Gross2013) +
 ```
 
 
-This is final our model:
-
-$\widehat{logit(PassFail)} = 1.23  -6.323e-09 (Budget)_i +  6.169e-02(log(IntGross))_i + 0.182log((DomGross))  -0.0304507	I(decade1980s)_i  + 0.6285726	I(decade1990s)_i  +   0.8578170I(decade2000s)_i     +   	0.6952480I(decade2010s)_i   -7.744e-03 \beta_8(log(IntGross))_i * DomGross_i$
-
-
 *Coefficient Interpretations*
 
 While controlling for the variables in our model, the odds of passing the
-Bechdel test for a movie that premiered in the 2000s is estimated to be 2.358008
+Bechdel test for a movie that premiered in the 1990s is estimated to be 2.3379
 times the odds of a film 
-that was released in the 1970s (adjusting for the our transformed variables).
+that was released in the 1970s (adjusting for our transformed variables).
 
 While controlling for the variables in our model, the odds of passing the
-Bechdel test for a movie that premiered in the 2010s is estimated to be 2.004206
+Bechdel test for a movie that premiered in the 2000s is estimated to be 2.959
 times the odds of a film 
-that was released in the 1970s (adjusting for the our transformed variables).
+that was released in the 1970s (adjusting for our transformed variables).
+
+While controlling for the variables in our model, the odds of passing the
+Bechdel test for a movie that premiered in the 2010s is estimated to be 2.601
+times the odds of a film 
+that was released in the 1970s (adjusting for our transformed variables).
+
+
 
 *Predictive Power*
 
@@ -475,8 +425,7 @@ probabilities of success for our binary variable "passfail." We will impose
 a threshold of 0.5 as our classifier. We will check the sensibility and
 sensitivity for our model to asses its predictive power and construct an ROC
 curve to show how specificity and specificity change as our
-discrimination threshold changes. Calculating the area underneath the ROC curve
-will also give us more insight into the predictive power of our model.
+discrimination threshold changes (see curve in Appendix).
 
 
 ```{r prediction-power, message = F, warning = F, echo=FALSE}
@@ -493,38 +442,16 @@ table(m2_aug$pred_leg, m2_aug$passfail) %>%
   kable()
 
 
-
-m2_aug %>% 
-  roc_auc(
-    truth = as.factor(passfail),
-    prob, 
-    event_level = "second"
-  )
-
-
-m2_aug %>% 
-  roc_curve(
-    truth = as.factor(passfail),
-    prob, 
-    event_level = "second"
-  ) %>% 
-  autoplot() 
-
-
-
- 400 /( 400 + 394)  #sensitivity
- 669 /( 669 + 313) # specificity
+ 
+ 
+ 398 / (398 + 396) #sensitivity
+ 666/ ( 666 + 316) # specificity
 
 
 ```
-
-Our Area under the curve is 0.63 which is higher than 0.05--meaning 
-that our model suggests some discrimination its outcomes are not completely
-governed by chance.
-
 To further evaluate the predictive power of our model, we also calculated
-the sensitivity and specificity of our model. Our specificity was 68.3%.
-Furthermore, our sensitivity was 49.%.
+the sensitivity and specificity of our model. Our specificity was  0.6782077
+Furthermore, our sensitivity was 0.5012594.
 
 ## Discussion ##
 
@@ -639,4 +566,44 @@ emplogitplot1(passfail ~ dom_Gross2013,
 
 
 ```
+```{r lin-assumption, message = F, warning = F, echo=FALSE, out.width="70%"}
 
+
+ library(Stat2Data)
+emplogitplot1(passfail ~ log(dom_Gross2013),
+              data = movies1_0,
+              ngroups = 10)
+
+  library(Stat2Data)
+emplogitplot1(passfail ~ budget_Gross2013,
+              data = movies1_0,
+              ngroups = 10)
+
+
+
+# transformed int variable because it violated one of our assymptions
+ library(Stat2Data)
+emplogitplot1(passfail ~ log(int_Gross2013),
+              data = movies1_0,
+              ngroups = 10)
+
+
+ library(Stat2Data)
+emplogitplot1(passfail ~ log(int_Gross2013) * dom_Gross2013,
+              data = movies1_0,
+              ngroups = 10)
+ 
+
+
+m2_aug %>% 
+  roc_curve(
+    truth = as.factor(passfail),
+    prob, 
+    event_level = "second"
+  ) %>% 
+  autoplot() 
+
+
+
+# nice
+```
